@@ -6,12 +6,12 @@ import Footer from '../components/Footer';
 import CryptoTicker from '../components/CryptoTicker';
 
 export const metadata: Metadata = {
-  title: "CryptoNews UK - Latest Cryptocurrency News & Analysis",
-  description: "Your premier source for cryptocurrency news, analysis and research in the United Kingdom. Stay updated with Bitcoin, Ethereum, DeFi and altcoin news.",
-  keywords: ["cryptocurrency", "bitcoin", "ethereum", "crypto news", "blockchain", "DeFi", "UK"],
-  authors: [{ name: "CryptoNews UK Team" }],
-  creator: "CryptoNews UK",
-  publisher: "CryptoNews UK",
+  title: "InfoCryptoX.com - Latest Cryptocurrency News & Analysis",
+  description: "Your premier source for cryptocurrency news, analysis and research. Stay updated with Bitcoin, Ethereum, DeFi and altcoin news from infocryptox.com.",
+  keywords: ["cryptocurrency", "bitcoin", "ethereum", "infocryptox.com", "blockchain", "DeFi", "crypto analysis"],
+  authors: [{ name: "InfoCryptoX Team" }],
+  creator: "InfoCryptoX.com",
+  publisher: "InfoCryptoX.com",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000'),
   robots: {
     index: true,
@@ -26,17 +26,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_UK',
+    locale: 'en_US',
     url: '/',
-    title: 'CryptoNews UK - Latest Cryptocurrency News & Analysis',
-    description: 'Your premier source for cryptocurrency news, analysis and research in the United Kingdom.',
-    siteName: 'CryptoNews UK',
+    title: 'InfoCryptoX.com - Latest Cryptocurrency News & Analysis',
+    description: 'Your premier source for cryptocurrency news, analysis and research. Stay updated with infocryptox.com.',
+    siteName: 'InfoCryptoX.com',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CryptoNews UK - Latest Cryptocurrency News & Analysis',
-    description: 'Your premier source for cryptocurrency news, analysis and research in the United Kingdom.',
-    creator: '@cryptonewsuk',
+    title: 'InfoCryptoX.com - Latest Cryptocurrency News & Analysis',
+    description: 'Your premier source for cryptocurrency news, analysis and research. Stay updated with infocryptox.com.',
+    creator: '@infocryptox',
   },
   alternates: {
     canonical: '/',

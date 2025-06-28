@@ -15,10 +15,10 @@ export default function ContactsPage() {
 
   // Устанавливаем метаданные
   useEffect(() => {
-    document.title = 'Contact Us - CryptoNews UK';
+    document.title = 'Contact Us - InfoCryptoX.com';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Get in touch with CryptoNews UK team. Send us your news tips, partnership inquiries, or feedback.');
+      metaDescription.setAttribute('content', 'Get in touch with InfoCryptoX.com team. Send us your news tips, partnership inquiries, or feedback.');
     }
   }, []);
 
@@ -55,44 +55,44 @@ export default function ContactsPage() {
       icon: Mail,
       title: "Email Us",
       description: "Get in touch via email",
-      contact: "editorial@cryptonews-uk.com",
-      link: "mailto:editorial@cryptonews-uk.com"
+      contact: "editorial@infocryptox.com",
+      link: "mailto:editorial@infocryptox.com"
     },
     {
       icon: Phone,
       title: "Call Us",
       description: "Speak with our team",
-      contact: "+44 20 7946 0958",
-      link: "tel:+442079460958"
+      contact: "+1 (555) CRYPTO-X",
+      link: "tel:+1555CRYPTOX"
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      description: "Our London office",
-      contact: "123 Crypto Street, London, UK",
-      link: "https://maps.google.com"
+      description: "Worldwide coverage",
+      contact: "infocryptox.com - Global Network",
+      link: "https://infocryptox.com"
     }
   ];
 
   const departments = [
     {
       name: "Editorial",
-      email: "editorial@cryptonews-uk.com",
+      email: "editorial@infocryptox.com",
       description: "News tips, story suggestions, press releases"
     },
     {
       name: "Partnerships",
-      email: "partnerships@cryptonews-uk.com",
+      email: "partnerships@infocryptox.com",
       description: "Business partnerships, sponsorships, collaborations"
     },
     {
       name: "Technical Support",
-      email: "support@cryptonews-uk.com",
+      email: "support@infocryptox.com",
       description: "Website issues, technical problems, accessibility"
     },
     {
       name: "Advertising",
-      email: "advertising@cryptonews-uk.com",
+      email: "advertising@infocryptox.com",
       description: "Advertising opportunities, media kit requests"
     }
   ];

@@ -126,7 +126,7 @@ const Home = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              CryptoNews UK
+              InfoCryptoX.com
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
               Your premier source for cryptocurrency news, analysis and research in the United Kingdom
@@ -140,7 +140,7 @@ const Home = () => {
         {/* Main Three-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           
-          {/* Left Column - Latest Crypto News */}
+                      {/* Left Column - Latest InfoCryptoX News */}
           <div className="lg:col-span-3">
             <div className="bg-slate-800 rounded-lg p-6">
               <div className="flex items-center space-x-2 mb-6">
@@ -175,7 +175,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Center Column - Crypto News Spotlight */}
+                      {/* Center Column - InfoCryptoX News Spotlight */}
           <div className="lg:col-span-6">
             <div className="bg-slate-800 rounded-lg overflow-hidden">
               <div className="p-6 pb-4">

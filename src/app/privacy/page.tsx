@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { Shield, Eye, Cookie, Database, Mail, Scale } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - CryptoNews UK',
-  description: 'Privacy Policy for CryptoNews UK. Learn how we collect, use, and protect your personal information.',
+  title: 'Privacy Policy - InfoCryptoX.com',
+  description: 'Privacy Policy for InfoCryptoX.com. Learn how we collect, use, and protect your personal information.',
   keywords: 'privacy policy, data protection, GDPR, personal information',
   openGraph: {
-    title: 'Privacy Policy - CryptoNews UK',
-    description: 'Privacy Policy for CryptoNews UK. Learn how we collect, use, and protect your personal information.',
+    title: 'Privacy Policy - InfoCryptoX.com',
+    description: 'Privacy Policy for InfoCryptoX.com. Learn how we collect, use, and protect your personal information.',
     type: 'website',
   },
 };
@@ -96,7 +96,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-bold text-white mb-4">Introduction</h2>
           <div className="text-gray-300 space-y-4">
             <p>
-              CryptoNews UK ("we," "our," or "us") is committed to protecting your privacy. 
+              InfoCryptoX.com ("we," "our," or "us") is committed to protecting your privacy. 
               This Privacy Policy explains how we collect, use, disclose, and safeguard your 
               information when you visit our website or use our services.
             </p>

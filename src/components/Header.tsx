@@ -13,8 +13,7 @@ const Header = () => {
     { name: 'Articles', href: '/articles' },
     { name: 'About Us', href: '/about' },
     { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Contacts', href: '/contacts' },
-    { name: 'Stats', href: '/stats' }
+    { name: 'Contacts', href: '/contacts' }
   ];
 
   const isActive = (path: string) => pathname === path;
@@ -29,8 +28,8 @@ const Header = () => {
               <Bitcoin className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">CryptoNews</h1>
-              <p className="text-sm text-gray-400">UK</p>
+              <h1 className="text-2xl font-bold text-white">InfoCryptoX</h1>
+              <p className="text-sm text-gray-400">.com</p>
             </div>
           </Link>
 

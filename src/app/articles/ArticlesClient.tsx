@@ -184,9 +184,9 @@ export default function ArticlesClient() {
       {articles.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article) => (
-            <Link key={article._id} href={`/article/${article._id}`}>
-              <article className="bg-slate-800 rounded-lg overflow-hidden hover:bg-slate-700 transition-colors group">
-                <div className="relative h-48 overflow-hidden">
+            <Link key={article._id} href={`/article/${article._id}`} className="h-full">
+              <article className="bg-slate-800 rounded-lg overflow-hidden hover:bg-slate-700 transition-colors group h-full flex flex-col">
+                <div className="relative h-48 overflow-hidden flex-shrink-0">
                   <img
                     src={getImageUrl(article)}
                     alt={article.title}
@@ -202,16 +202,16 @@ export default function ArticlesClient() {
                   </div>
                 </div>
                 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <h3 className="text-white font-semibold mb-3 line-clamp-2 group-hover:text-blue-400 transition-colors">
                     {article.title}
                   </h3>
                   
-                  <p className="text-gray-400 mb-4 line-clamp-3 text-sm leading-relaxed">
+                  <p className="text-gray-400 mb-4 line-clamp-3 text-sm leading-relaxed flex-1">
                     {getPreviewText(article)}
                   </p>
                   
-                  <div className="flex items-center justify-between text-gray-400 text-sm">
+                  <div className="flex items-center justify-between text-gray-400 text-sm mt-auto">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />

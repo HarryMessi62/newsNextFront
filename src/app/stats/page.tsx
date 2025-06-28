@@ -9,10 +9,10 @@ export default function StatsPage() {
 
   useEffect(() => {
     setMounted(true);
-    document.title = 'Analytics & Stats - CryptoNews UK';
+    document.title = 'Analytics & Stats - InfoCryptoX.com';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Website analytics and performance statistics for CryptoNews UK. View visitor insights and article performance.');
+      metaDescription.setAttribute('content', 'Website analytics and performance statistics for InfoCryptoX.com. View visitor insights and article performance.');
     }
   }, []);
 

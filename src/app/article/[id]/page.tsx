@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     
     if (!article) {
       return {
-        title: 'Article Not Found - CryptoNews UK',
+        title: 'Article Not Found - InfoCryptoX.com',
         description: 'The requested article could not be found.'
       };
     }
@@ -27,25 +27,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `${baseUrl}/api/og?title=${encodeURIComponent(article.title)}`;
 
     return {
-      title: `${article.title} - CryptoNews UK`,
+      title: `${article.title} - InfoCryptoX.com`,
       description: article.excerpt || article.title,
       keywords: [
         'cryptocurrency',
-        'crypto news',
+        'infocryptox.com',
         'blockchain',
         'bitcoin',
         'ethereum',
         article.category,
         ...article.tags || []
       ].join(', '),
-      authors: [{ name: typeof article.author === 'string' ? article.author : article.author?.fullName || 'CryptoNews UK Team' }],
+      authors: [{ name: typeof article.author === 'string' ? article.author : article.author?.fullName || 'InfoCryptoX Team' }],
       openGraph: {
         title: article.title,
         description: article.excerpt || article.title,
         type: 'article',
         publishedTime: article.createdAt,
         modifiedTime: article.updatedAt,
-        authors: [typeof article.author === 'string' ? article.author : article.author?.fullName || 'CryptoNews UK Team'],
+        authors: [typeof article.author === 'string' ? article.author : article.author?.fullName || 'InfoCryptoX Team'],
         images: [{
           url: imageUrl,
           width: 1200,
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: 'Article Not Found - CryptoNews UK',
+      title: 'Article Not Found - InfoCryptoX.com',
       description: 'The requested article could not be found.'
     };
   }

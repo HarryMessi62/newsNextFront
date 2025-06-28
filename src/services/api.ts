@@ -87,12 +87,12 @@ export interface CryptoData {
 
 // Utility functions
 export const getAuthorName = (author: Author | string | null | undefined): string => {
-  if (!author) return 'Crypto News Team';
+  if (!author) return 'InfoCryptoX Team';
   if (typeof author === 'string') return author;
   if (typeof author === 'object') {
-    return author.fullName || author.username || 'Crypto News Team';
+    return author.fullName || author.username || 'InfoCryptoX Team';
   }
-  return 'Crypto News Team';
+  return 'InfoCryptoX Team';
 };
 
 export const getArticleViews = (article: Article): number => {

@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { Users, Target, Award, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us - CryptoNews UK',
-  description: 'Learn about CryptoNews UK - your trusted source for cryptocurrency news, analysis, and insights in the United Kingdom.',
-  keywords: 'crypto news UK, cryptocurrency news, blockchain news, about us',
+  title: 'About Us - InfoCryptoX.com',
+  description: 'Learn about InfoCryptoX.com - your trusted source for cryptocurrency news, analysis, and insights worldwide.',
+  keywords: 'infocryptox.com, cryptocurrency news, blockchain news, crypto analysis, about us',
   openGraph: {
-    title: 'About Us - CryptoNews UK',
-    description: 'Learn about CryptoNews UK - your trusted source for cryptocurrency news, analysis, and insights.',
+    title: 'About Us - InfoCryptoX.com',
+    description: 'Learn about InfoCryptoX.com - your trusted source for cryptocurrency news, analysis, and insights.',
     type: 'website',
   },
 };
@@ -49,7 +49,7 @@ export default function AboutPage() {
     {
       icon: Globe,
       title: "Global Perspective",
-      description: "Covering crypto news from a uniquely British viewpoint while maintaining global awareness."
+      description: "Comprehensive worldwide crypto news coverage with expert analysis from infocryptox.com."
     },
     {
       icon: Users,
@@ -70,11 +70,11 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            About CryptoNews UK
+            About InfoCryptoX.com
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Your trusted source for cryptocurrency news, market analysis, and blockchain insights 
-            in the United Kingdom and beyond.
+            worldwide from infocryptox.com.
           </p>
         </div>
 
@@ -181,13 +181,13 @@ export default function AboutPage() {
           </p>
           <div className="space-y-4">
             <p className="text-gray-300">
-              <span className="font-semibold">Email:</span> editorial@cryptonews-uk.com
+              <span className="font-semibold">Email:</span> editorial@infocryptox.com
             </p>
             <p className="text-gray-300">
-              <span className="font-semibold">Press Inquiries:</span> press@cryptonews-uk.com
+              <span className="font-semibold">Press Inquiries:</span> press@infocryptox.com
             </p>
             <p className="text-gray-300">
-              <span className="font-semibold">Partnerships:</span> partnerships@cryptonews-uk.com
+              <span className="font-semibold">Partnerships:</span> partnerships@infocryptox.com
             </p>
           </div>
         </div>
