@@ -3,47 +3,36 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Search, Filter, Grid, List, Calendar, Eye, Heart, Tag, Loader } from 'lucide-react';
-import { useArticles, useArticlesByCategory, useSearchArticles } from '../../hooks/useArticles';
+import { Search, Filter, Calendar, Eye, Loader } from 'lucide-react';
+import { useArticles, useSearchArticles } from '../../hooks/useArticles';
+import { getArticleViews, getAuthorName as getAuthorNameFromAPI, type Article } from '../../services/api';
 
 export default function ArticlesClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Initialize from URL parameters
   useEffect(() => {
     if (!searchParams) return;
     
-    const categoryParam = searchParams.get('category');
     const searchParam = searchParams.get('search');
-    
-    if (categoryParam && categoryParam !== selectedCategory) {
-      setSelectedCategory(categoryParam);
-    }
     
     if (searchParam && searchParam !== searchTerm) {
       setSearchTerm(searchParam);
       setDebouncedSearch(searchParam);
     }
-  }, [searchParams]);
+  }, [searchParams, searchTerm]);
 
   // Choose appropriate hook based on filters
   const allArticlesQuery = useArticles(currentPage, 12);
-  const categoryQuery = useArticlesByCategory(selectedCategory, currentPage, 12);
   const searchQuery = useSearchArticles(debouncedSearch, currentPage, 12);
   
   // Determine active query
-  const activeQuery = debouncedSearch 
-    ? searchQuery 
-    : selectedCategory !== 'All' 
-      ? categoryQuery 
-      : allArticlesQuery;
+  const activeQuery = debouncedSearch ? searchQuery : allArticlesQuery;
   
   const { data, isLoading, error } = activeQuery;
   const articles = data?.articles || [];
@@ -65,10 +54,6 @@ export default function ArticlesClient() {
     
     const params = new URLSearchParams();
     
-    if (selectedCategory !== 'All') {
-      params.set('category', selectedCategory);
-    }
-    
     if (debouncedSearch) {
       params.set('search', debouncedSearch);
     }
@@ -79,34 +64,16 @@ export default function ArticlesClient() {
     if (window.location.pathname + window.location.search !== newUrl) {
       router.push(newUrl, { scroll: false });
     }
-  }, [selectedCategory, debouncedSearch, router]);
+  }, [debouncedSearch, router]);
 
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, debouncedSearch]);
+  }, [debouncedSearch]);
 
-  const categories = [
-    'All', 
-    'Price Analysis', 
-    'Ethereum News', 
-    'Bitcoin News',
-    'DeFi News', 
-    'Regulation', 
-    'NFT News',
-    'Altcoin News'
-  ];
+  const getAuthorName = getAuthorNameFromAPI;
 
-  const getAuthorName = (author: any): string => {
-    if (!author) return "Crypto News Team";
-    if (typeof author === 'string') return author;
-    if (typeof author === 'object') {
-      return author.fullName || author.username || author.name || "Crypto News Team";
-    }
-    return "Crypto News Team";
-  };
-
-  const getImageUrl = (article: any) => {
+  const getImageUrl = (article: Article) => {
     // First check for media.featuredImage.url
     if (article.media?.featuredImage?.url) {
       return article.media.featuredImage.url;
@@ -128,7 +95,7 @@ export default function ArticlesClient() {
     });
   };
 
-  const getPreviewText = (article: any, maxLength: number = 150) => {
+  const getPreviewText = (article: Article, maxLength: number = 150) => {
     // First try to use excerpt if available
     if (article.excerpt && article.excerpt.trim()) {
       const excerpt = article.excerpt.trim();
@@ -142,7 +109,7 @@ export default function ArticlesClient() {
     }
     
     // Remove HTML tags and decode HTML entities
-    let textContent = article.content
+    const textContent = article.content
       .replace(/<[^>]*>/g, '') // Remove HTML tags
       .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
       .replace(/&amp;/g, '&') // Replace &amp; with &
@@ -184,22 +151,7 @@ export default function ArticlesClient() {
           </button>
         </div>
 
-        {/* Categories */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              {category === 'All' ? 'All Categories' : category}
-            </button>
-          ))}
-        </div>
+
       </div>
 
       {/* Loading State */}
@@ -267,7 +219,7 @@ export default function ArticlesClient() {
                       </div>
                       <div className="flex items-center">
                         <Eye className="h-4 w-4 mr-1" />
-                        <span>{article.stats?.views?.total || article.views || 0}</span>
+                        <span>{getArticleViews(article)}</span>
                       </div>
                     </div>
                     <span className="text-blue-400 text-xs">
@@ -314,7 +266,7 @@ export default function ArticlesClient() {
           Showing {articles.length} of {total} articles
           {debouncedSearch && (
             <span className="ml-2 text-blue-400">
-              for "{debouncedSearch}"
+              for &quot;{debouncedSearch}&quot;
             </span>
           )}
         </div>

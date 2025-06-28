@@ -1,6 +1,20 @@
 'use client';
 
+import { Suspense } from 'react';
+import { Loader } from 'lucide-react';
 import ArticlesClient from './ArticlesClient';
+
+// Loading component for Suspense fallback
+function ArticlesLoading() {
+  return (
+    <div className="flex justify-center items-center py-20">
+      <div className="flex items-center space-x-2 text-white">
+        <Loader className="h-6 w-6 animate-spin" />
+        <span>Loading articles...</span>
+      </div>
+    </div>
+  );
+}
 
 export default function ArticlesPage() {
   return (
@@ -16,7 +30,9 @@ export default function ArticlesPage() {
           </p>
         </div>
 
-        <ArticlesClient />
+        <Suspense fallback={<ArticlesLoading />}>
+          <ArticlesClient />
+        </Suspense>
       </div>
     </div>
   );

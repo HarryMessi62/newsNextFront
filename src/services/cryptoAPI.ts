@@ -100,4 +100,35 @@ export const formatPriceChange = (change: number, isPercent: boolean = false): s
   } else {
     return `${sign}${change.toFixed(2)}`;
   }
+};
+
+// Функция для получения топ криптовалют (для тикера)
+export const getTopCryptoPrices = async (): Promise<Array<{
+  symbol: string;
+  name: string;
+  current_price: number;
+  price_change_percentage_24h: number;
+}>> => {
+  try {
+    // В реальном проекте здесь был бы запрос к API
+    // Возвращаем моковые данные в формате, ожидаемом CryptoTicker
+    return Object.values(mockCryptoData).map(crypto => ({
+      symbol: crypto.symbol,
+      name: crypto.name,
+      current_price: crypto.price,
+      price_change_percentage_24h: crypto.changePercent24h
+    }));
+  } catch (error) {
+    console.error('Error fetching top crypto prices:', error);
+    return [];
+  }
+};
+
+// Экспортируем объект с методами для удобства
+export const cryptoAPI = {
+  getCryptoPrice,
+  getMultipleCryptoPrices,
+  getTopCryptoPrices,
+  formatPrice,
+  formatPriceChange
 }; 

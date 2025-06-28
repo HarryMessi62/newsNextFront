@@ -2,26 +2,39 @@
 
 import { TrendingUp, Star, TrendingDown, Coins, Eye, Clock, ArrowRight, Loader } from 'lucide-react';
 import Link from 'next/link';
-import { useHomeData, useArticlesByCategory } from '../../hooks/useArticles';
+import { useHomeData } from '../../hooks/useArticles';
+import { getArticleViews, getAuthorName as getAuthorNameFromAPI } from '../../services/api';
 
 const Home = () => {
-  const { featured, latest, bitcoin, altcoin, defi, isLoading, hasError } = useHomeData();
+  const { featured, latest, isLoading, hasError } = useHomeData();
   
-  // Загружаем статьи из дополнительных категорий
-  const { data: tradingArticles } = useArticlesByCategory('trading');
-  const { data: regulationArticles } = useArticlesByCategory('regulation');
-  const { data: nftArticles } = useArticlesByCategory('nft');
-  const { data: miningArticles } = useArticlesByCategory('mining');
+  // Функция для получения уникальных статей с тегами
+  const getArticlesByTags = () => {
+    if (!latest.data || latest.data.length === 0) return [];
+    
+    // Фильтруем статьи которые имеют теги и выбираем уникальные
+    const articlesWithTags = latest.data
+      .filter(article => article.tags && Array.isArray(article.tags) && article.tags.length > 0)
+      .slice(0, 4) // Берём первые 4 статьи с тегами
+      .map(article => {
+        // Для каждой статьи выбираем первый подходящий тег
+        const validTag = article.tags.find(tag => tag && typeof tag === 'string' && tag.length > 0);
+        return {
+          ...article,
+          currentTag: validTag || 'General'
+        };
+      });
+    
+    return articlesWithTags;
+  };
+  
+  const taggedArticles = getArticlesByTags();
+  
+  // Добавляем отладочную информацию
+  console.log('Tagged articles:', taggedArticles);
 
   // Helper functions
-  const getAuthorName = (author: any): string => {
-    if (!author) return "Crypto News Team";
-    if (typeof author === 'string') return author;
-    if (typeof author === 'object') {
-      return author.fullName || author.username || author.name || "Crypto News Team";
-    }
-    return "Crypto News Team";
-  };
+  const getAuthorName = getAuthorNameFromAPI;
 
   const getImageUrl = (article: any) => {
     // First check for media.featuredImage.url
@@ -259,7 +272,7 @@ const Home = () => {
                           </h3>
                           <div className="flex items-center space-x-2 text-xs text-gray-500">
                             <Eye className="w-3 h-3" />
-                            <span>{article.views || 0} views</span>
+                            <span>{getArticleViews(article)} views</span>
                           </div>
                         </div>
                       </div>
@@ -271,79 +284,71 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Categories Section */}
+        {/* Latest Articles by Tags Section */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Explore Categories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">Latest Articles by Tags</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
             
-            {/* Bitcoin News */}
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                <h3 className="text-xl font-bold text-white">Bitcoin News</h3>
+            {taggedArticles.length > 0 ? (
+              taggedArticles.map((article, index) => {
+                // Цвета для тегов
+                const tagColors = [
+                  'bg-orange-500',   // 1й тег
+                  'bg-purple-500',   // 2й тег  
+                  'bg-green-500',    // 3й тег
+                  'bg-pink-500',     // 4й тег
+                ];
+                
+                const tagColor = tagColors[index % tagColors.length];
+                
+                return (
+                  <div key={`${article._id}-${article.currentTag}`} className="bg-slate-800 rounded-lg overflow-hidden group hover:bg-slate-700 transition-colors">
+                    <Link href={`/article/${article._id}`} className="block">
+                      <div className="relative">
+                        <img
+                          src={getImageUrl(article)}
+                          alt={article.title}
+                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=400&h=200&fit=crop';
+                          }}
+                        />
+                        <div className="absolute top-3 left-3">
+                          <span className={`${tagColor} text-white px-2 py-1 rounded text-xs font-medium`}>
+                            {article.currentTag}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-white font-semibold mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-gray-400 text-sm line-clamp-2 mb-3">
+                          {getPreviewText(article, 80)}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                          <span>{formatDate(article.createdAt)}</span>
+                          <div className="flex items-center space-x-1">
+                            <Eye className="w-3 h-3" />
+                            <span>{getArticleViews(article)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })
+            ) : (
+              // Fallback если нет статей с тегами
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-400 text-lg mb-2">
+                  No tagged articles available
+                </div>
+                <p className="text-gray-500 text-sm">
+                  Latest articles will appear here when they have tags
+                </p>
               </div>
-              <div className="space-y-3">
-                {bitcoin.data.slice(0, 4).map((article) => (
-                  <Link key={article._id} href={`/article/${article._id}`} className="block">
-                    <div className="group cursor-pointer">
-                      <h4 className="text-white text-sm font-medium group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">
-                        {article.title}
-                      </h4>
-                      <p className="text-gray-500 text-xs">{formatDate(article.createdAt)}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <Link href="/articles?category=Bitcoin News" className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm mt-4">
-                View all <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </div>
-
-            {/* Altcoin News */}
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <h3 className="text-xl font-bold text-white">Altcoin News</h3>
-              </div>
-              <div className="space-y-3">
-                {altcoin.data.slice(0, 4).map((article) => (
-                  <Link key={article._id} href={`/article/${article._id}`} className="block">
-                    <div className="group cursor-pointer">
-                      <h4 className="text-white text-sm font-medium group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">
-                        {article.title}
-                      </h4>
-                      <p className="text-gray-500 text-xs">{formatDate(article.createdAt)}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <Link href="/articles?category=Altcoin News" className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm mt-4">
-                View all <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </div>
-
-            {/* DeFi News */}
-            <div className="bg-slate-800 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <h3 className="text-xl font-bold text-white">DeFi News</h3>
-              </div>
-              <div className="space-y-3">
-                {defi.data.slice(0, 4).map((article) => (
-                  <Link key={article._id} href={`/article/${article._id}`} className="block">
-                    <div className="group cursor-pointer">
-                      <h4 className="text-white text-sm font-medium group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">
-                        {article.title}
-                      </h4>
-                      <p className="text-gray-500 text-xs">{formatDate(article.createdAt)}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <Link href="/articles?category=DeFi News" className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm mt-4">
-                View all <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </div>
+            )}
           </div>
         </div>
 

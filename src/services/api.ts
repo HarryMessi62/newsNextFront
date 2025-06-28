@@ -86,9 +86,52 @@ export interface CryptoData {
 }
 
 // Utility functions
-export const getAuthorName = (author: Author | null): string => {
-  if (!author) return 'Anonymous';
-  return author.fullName || author.username || 'Anonymous';
+export const getAuthorName = (author: Author | string | null | undefined): string => {
+  if (!author) return 'Crypto News Team';
+  if (typeof author === 'string') return author;
+  if (typeof author === 'object') {
+    return author.fullName || author.username || 'Crypto News Team';
+  }
+  return 'Crypto News Team';
+};
+
+export const getArticleViews = (article: Article): number => {
+  // Проверяем сначала новую структуру stats.views.total
+  if (article.stats?.views?.total !== undefined) {
+    return article.stats.views.total;
+  }
+  // Затем проверяем поле для обратной совместимости
+  if (article.views !== undefined) {
+    return article.views;
+  }
+  // Возвращаем 0 если ничего не найдено
+  return 0;
+};
+
+export const getArticleLikes = (article: Article): number => {
+  // Проверяем сначала новую структуру stats.likes.total
+  if (article.stats?.likes?.total !== undefined) {
+    return article.stats.likes.total;
+  }
+  // Затем проверяем поле для обратной совместимости
+  if (article.likes !== undefined) {
+    return article.likes;
+  }
+  // Возвращаем 0 если ничего не найдено
+  return 0;
+};
+
+export const getArticleComments = (article: Article): number => {
+  // Проверяем сначала новую структуру stats.comments.total
+  if (article.stats?.comments?.total !== undefined) {
+    return article.stats.comments.total;
+  }
+  // Затем проверяем поле для обратной совместимости
+  if (article.comments !== undefined) {
+    return article.comments;
+  }
+  // Возвращаем 0 если ничего не найдено
+  return 0;
 };
 
 // API методы для статей

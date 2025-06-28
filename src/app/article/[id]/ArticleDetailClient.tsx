@@ -1,27 +1,19 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Calendar, Eye, Heart, MessageCircle, Share2, ArrowLeft, User, Clock, Tag, Twitter, Linkedin, Mail, Copy, Check, ChevronRight } from 'lucide-react';
+import { Calendar, Eye, Heart, MessageCircle, Share2, ArrowLeft, User, Clock, ChevronRight } from 'lucide-react';
 import { useArticleLikes, useArticleComments, useIncrementViews, useToggleLike, useAddComment } from '../../../hooks/useArticles';
-import { getUserFingerprint, markUserAsCommented } from '../../../utils/commentStorage';
+import { getUserFingerprint } from '../../../utils/commentStorage';
 import { isArticleViewed, markArticleAsViewed } from '../../../utils/viewTracker';
+import { getArticleViews, getAuthorName as getAuthorNameFromAPI, type Article } from '../../../services/api';
 
-interface Article {
+interface Comment {
   _id: string;
-  title: string;
-  excerpt?: string;
-  content: string;
-  imageUrl: string;
-  category: string;
-  tags?: string[];
-  author: any;
+  text: string;
+  userEmail?: string;
   createdAt: string;
-  updatedAt?: string;
-  views?: number;
-  likes?: number;
-  comments?: number;
 }
 
 interface ArticleDetailClientProps {
@@ -59,7 +51,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
       markArticleAsViewed(articleId);
       incrementViews.mutate(articleId);
     }
-  }, [articleId]);
+  }, [articleId, incrementViews]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -71,16 +63,9 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
     });
   };
 
-  const getAuthorName = (author: any): string => {
-    if (!author) return "Crypto News Team";
-    if (typeof author === 'string') return author;
-    if (typeof author === 'object') {
-      return author.fullName || author.username || author.name || "Crypto News Team";
-    }
-    return "Crypto News Team";
-  };
+  const getAuthorName = getAuthorNameFromAPI;
 
-  const getImageUrl = (article: any) => {
+  const getImageUrl = (article: Article) => {
     // First check for media.featuredImage.url
     if (article.media?.featuredImage?.url) {
       return article.media.featuredImage.url;
@@ -94,7 +79,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
     return 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=800&h=400&fit=crop';
   };
 
-  const getPreviewText = (article: any, maxLength: number = 100) => {
+  const getPreviewText = (article: Article, maxLength: number = 100) => {
     // First try to use excerpt if available
     if (article.excerpt && article.excerpt.trim()) {
       const excerpt = article.excerpt.trim();
@@ -108,7 +93,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
     }
     
     // Remove HTML tags and decode HTML entities
-    let textContent = article.content
+    const textContent = article.content
       .replace(/<[^>]*>/g, '') // Remove HTML tags
       .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
       .replace(/&amp;/g, '&') // Replace &amp; with &
@@ -129,7 +114,6 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
   const handleShare = async (platform?: string) => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
     const title = article.title;
-    const text = article.excerpt || article.title;
 
     if (platform === 'twitter') {
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
@@ -183,7 +167,6 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
 
   const currentLikes = likesData?.totalLikes || article.likes || 0;
   const isLiked = likesData?.userLiked || false;
-  const currentComments = commentsData?.comments || [];
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -267,7 +250,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
               </div>
               <div className="flex items-center space-x-2">
                 <Eye className="w-5 h-5" />
-                <span>{article.stats?.views?.total || article.views || 0} views</span>
+                                  <span>{getArticleViews(article)} views</span>
               </div>
             </div>
 
@@ -404,7 +387,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
 
               {/* Comments List */}
               <div className="space-y-6">
-                {commentsData?.comments?.map((comment: any) => (
+                {commentsData?.comments?.map((comment: Comment) => (
                   <div key={comment._id} className="bg-slate-800 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -464,7 +447,7 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
                         </p>
                         <div className="flex items-center justify-between text-gray-400 text-sm">
                           <span>{formatDate(relatedArticle.createdAt)}</span>
-                          <span>{relatedArticle.stats?.views?.total || relatedArticle.views || 0} views</span>
+                          <span>{getArticleViews(relatedArticle)} views</span>
                         </div>
                       </div>
                     </div>

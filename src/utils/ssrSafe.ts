@@ -32,6 +32,11 @@ export const safeWindow = (() => {
       platform: '',
       language: 'en-US'
     },
+    screen: {
+      width: 0,
+      height: 0,
+      colorDepth: 0
+    },
     document: {
       title: '',
       head: null,

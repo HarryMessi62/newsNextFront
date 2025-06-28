@@ -63,10 +63,7 @@ export const usePopularArticles = (limit = 10) => {
 // Составной хук для главной страницы
 export const useHomeData = () => {
   const featuredQuery = useFeaturedArticles(6);
-  const latestQuery = useLatestArticles(12);
-  const bitcoinQuery = useArticlesByCategory('Bitcoin News', 1, 6);
-  const altcoinQuery = useArticlesByCategory('Altcoin News', 1, 6);
-  const defiQuery = useArticlesByCategory('DeFi News', 1, 6);
+  const latestQuery = useLatestArticles(20); // Увеличиваем количество для лучшего выбора тегов
 
   return {
     featured: {
@@ -79,23 +76,8 @@ export const useHomeData = () => {
       isLoading: latestQuery.isLoading,
       error: latestQuery.error,
     },
-    bitcoin: {
-      data: bitcoinQuery.data?.articles || [],
-      isLoading: bitcoinQuery.isLoading,
-      error: bitcoinQuery.error,
-    },
-    altcoin: {
-      data: altcoinQuery.data?.articles || [],
-      isLoading: altcoinQuery.isLoading,
-      error: altcoinQuery.error,
-    },
-    defi: {
-      data: defiQuery.data?.articles || [],
-      isLoading: defiQuery.isLoading,
-      error: defiQuery.error,
-    },
-    isLoading: featuredQuery.isLoading || latestQuery.isLoading || bitcoinQuery.isLoading || altcoinQuery.isLoading || defiQuery.isLoading,
-    hasError: !!(featuredQuery.error || latestQuery.error || bitcoinQuery.error || altcoinQuery.error || defiQuery.error),
+    isLoading: featuredQuery.isLoading || latestQuery.isLoading,
+    hasError: !!(featuredQuery.error || latestQuery.error),
   };
 };
 
