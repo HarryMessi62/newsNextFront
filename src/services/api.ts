@@ -1,10 +1,8 @@
 import axios from 'axios';
-
-// Создаем экземпляр axios с базовой конфигурацией
+ 
+// Создаем экземпляр axios с базовой конфигурацией https://infocryptox.com/api
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' 
-    ? 'https://infocryptox.com/api' 
-    : 'https://infocryptox.com/api',
+  baseURL: 'http://localhost:5000/api', // Замените на ваш реальный URL API,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',

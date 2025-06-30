@@ -1,4 +1,3 @@
-// Сервис для получения данных криптовалют
 export interface CryptoPrice {
   symbol: string;
   name: string;
@@ -8,127 +7,94 @@ export interface CryptoPrice {
   marketCap?: number;
 }
 
-// Моковые данные для демонстрации (в реальном проекте здесь был бы API)
-const mockCryptoData: Record<string, CryptoPrice> = {
-  'BTC': {
-    symbol: 'BTC',
-    name: 'Bitcoin',
-    price: 106066,
-    change24h: 340.5,
-    changePercent24h: 0.32,
-    marketCap: 2100000000000
-  },
-  'ETH': {
-    symbol: 'ETH',
-    name: 'Ethereum',
-    price: 3890.45,
-    change24h: -45.2,
-    changePercent24h: -1.15,
-    marketCap: 467000000000
-  },
-  'ADA': {
-    symbol: 'ADA',
-    name: 'Cardano',
-    price: 1.08,
-    change24h: 0.05,
-    changePercent24h: 4.85,
-    marketCap: 38000000000
-  },
-  'SOL': {
-    symbol: 'SOL',
-    name: 'Solana',
-    price: 245.67,
-    change24h: 12.3,
-    changePercent24h: 5.27,
-    marketCap: 115000000000
-  },
-  'DOT': {
-    symbol: 'DOT',
-    name: 'Polkadot',
-    price: 8.92,
-    change24h: -0.23,
-    changePercent24h: -2.51,
-    marketCap: 12000000000
+// Базовый эндпоинт бэкенда
+const API_BASE = '/api/crypto/prices';
+
+// Получить все цены сразу
+export const fetchAllCryptoPrices = async (): Promise<Record<string, CryptoPrice>> => {
+  const res = await fetch('http://localhost:5000' + API_BASE, { credentials: 'include' });
+  if (!res.ok) {
+    throw new Error('Не удалось получить цены криптовалют');
   }
+  const json = await res.json();
+  return json.data as Record<string, CryptoPrice>;
 };
 
-// Функция для получения данных криптовалюты
+// Получить цену конкретного символа (BTC, ETH и т.д.)
 export const getCryptoPrice = async (symbol: string): Promise<CryptoPrice | null> => {
   try {
-    // В реальном проекте здесь был бы запрос к CoinGecko или другому API
-    // const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd&include_24hr_change=true`);
-    
-    // Для демонстрации используем моковые данные
-    const upperSymbol = symbol.toUpperCase();
-    return mockCryptoData[upperSymbol] || null;
+    const all = await fetchAllCryptoPrices();
+    return all[symbol.toUpperCase()] || null;
   } catch (error) {
-    console.error('Error fetching crypto price:', error);
+    console.error('Ошибка получения цены', error);
     return null;
   }
 };
 
-// Функция для получения нескольких криптовалют
-export const getMultipleCryptoPrices = async (symbols: string[]): Promise<Record<string, CryptoPrice>> => {
-  const results: Record<string, CryptoPrice> = {};
-  
-  for (const symbol of symbols) {
-    const data = await getCryptoPrice(symbol);
-    if (data) {
-      results[symbol.toUpperCase()] = data;
-    }
+// Получить цены нескольких символов одной загрузкой
+export const getMultipleCryptoPrices = async (
+  symbols: string[]
+): Promise<Record<string, CryptoPrice>> => {
+  try {
+    const all = await fetchAllCryptoPrices();
+    const result: Record<string, CryptoPrice> = {};
+    symbols.forEach((s) => {
+      const upper = s.toUpperCase();
+      if (all[upper]) result[upper] = all[upper];
+    });
+    return result;
+  } catch (error) {
+    console.error(error);
+    return {};
   }
-  
-  return results;
 };
 
-// Функция для форматирования цены
+// Форматирование цены
 export const formatPrice = (price: number): string => {
   if (price >= 1000) {
-    return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  } else if (price >= 1) {
-    return `$${price.toFixed(2)}`;
-  } else {
-    return `$${price.toFixed(6)}`;
+    return `$${price.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   }
+  if (price >= 1) return `$${price.toFixed(2)}`;
+  return `$${price.toFixed(6)}`;
 };
 
-// Функция для форматирования изменения цены
-export const formatPriceChange = (change: number, isPercent: boolean = false): string => {
+// Форматирование изменения цены
+export const formatPriceChange = (
+  change: number,
+  isPercent = false
+): string => {
   const sign = change >= 0 ? '+' : '';
-  if (isPercent) {
-    return `${sign}${change.toFixed(2)}%`;
-  } else {
-    return `${sign}${change.toFixed(2)}`;
-  }
+  return isPercent
+    ? `${sign}${change.toFixed(2)}%`
+    : `${sign}${change.toFixed(2)}`;
 };
 
-// Функция для получения топ криптовалют (для тикера)
+// Получить топ-криптовалют (сортировка по цене, можно изменить на marketCap)
 export const getTopCryptoPrices = async (): Promise<Array<{
   symbol: string;
   name: string;
   current_price: number;
   price_change_percentage_24h: number;
 }>> => {
-  try {
-    // В реальном проекте здесь был бы запрос к API
-    // Возвращаем моковые данные в формате, ожидаемом CryptoTicker
-    return Object.values(mockCryptoData).map(crypto => ({
-      symbol: crypto.symbol,
-      name: crypto.name,
-      current_price: crypto.price,
-      price_change_percentage_24h: crypto.changePercent24h
-    }));
-  } catch (error) {
-    console.error('Error fetching top crypto prices:', error);
-    return [];
-  }
+  const data = await fetchAllCryptoPrices();
+  const list = Object.values(data).map((c) => ({
+    symbol: c.symbol,
+    name: c.name,
+    current_price: c.price,
+    price_change_percentage_24h: c.changePercent24h,
+  }));
+
+  return list.sort((a, b) => b.current_price - a.current_price);
 };
 
-// Экспортируем объект с методами для удобства
 export const cryptoAPI = {
+  fetchAllCryptoPrices,
   getCryptoPrice,
   getMultipleCryptoPrices,
-  getTopCryptoPrices,
   formatPrice,
-  formatPriceChange
-}; 
+  formatPriceChange,
+  getTopCryptoPrices,
+};

@@ -165,7 +165,9 @@ export default function ArticleDetailClient({ article, relatedArticles }: Articl
     return <div className="min-h-screen bg-slate-900"></div>;
   }
 
-  const currentLikes = likesData?.totalLikes || article.likes || 0;
+  const currentLikes = likesData?.stats.total || article.likes || 0;
+
+  // console.log(likesData, );
   const isLiked = likesData?.userLiked || false;
 
   return (
