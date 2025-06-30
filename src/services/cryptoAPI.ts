@@ -12,7 +12,7 @@ const API_BASE = '/api/crypto/prices';
 
 // Получить все цены сразу
 export const fetchAllCryptoPrices = async (): Promise<Record<string, CryptoPrice>> => {
-  const res = await fetch('http://localhost:5000' + API_BASE, { credentials: 'include' });
+  const res = await fetch('https://infocryptox.com' + API_BASE, { credentials: 'include' });
   if (!res.ok) {
     throw new Error('Не удалось получить цены криптовалют');
   }
