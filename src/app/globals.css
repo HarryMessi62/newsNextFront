@@ -72,7 +72,7 @@ body {
 }
 
 .article-content a {
-  @apply text-blue-400 hover:text-blue-300 transition-colors;
+  @apply text-blue-400 hover:text-blue-300 transition-colors underline;
 }
 
 .article-content img {

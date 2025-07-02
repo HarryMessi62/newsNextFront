@@ -1,31 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Search, Filter, Calendar, Eye, Loader } from 'lucide-react';
 import { useArticles, useSearchArticles } from '../../hooks/useArticles';
 import { getArticleViews, getAuthorName as getAuthorNameFromAPI, type Article } from '../../services/api';
 
 export default function ArticlesClient() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Initialize from URL parameters
+  // Инициализация из URL-параметров (только при маунте)
   useEffect(() => {
-    if (!searchParams) return;
-    
-    const searchParam = searchParams.get('search');
-    
-    if (searchParam && searchParam !== searchTerm) {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const searchParam = params.get('search');
+
+    if (searchParam) {
       setSearchTerm(searchParam);
       setDebouncedSearch(searchParam);
     }
-  }, [searchParams, searchTerm]);
+  }, []);
 
   // Choose appropriate hook based on filters
   const allArticlesQuery = useArticles(currentPage, 12);
@@ -48,23 +45,19 @@ export default function ArticlesClient() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Update URL when filters change
+  // Обновляем URL при изменении debouncedSearch, не вызывая навигацию
   useEffect(() => {
-    if (!router || typeof window === 'undefined') return;
-    
-    const params = new URLSearchParams();
-    
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.href);
     if (debouncedSearch) {
-      params.set('search', debouncedSearch);
+      url.searchParams.set('search', debouncedSearch);
+    } else {
+      url.searchParams.delete('search');
     }
-    
-    const newUrl = `/articles${params.toString() ? `?${params.toString()}` : ''}`;
-    
-    // Only update if URL would actually change
-    if (window.location.pathname + window.location.search !== newUrl) {
-      router.push(newUrl, { scroll: false });
-    }
-  }, [debouncedSearch, router]);
+
+    window.history.replaceState(null, '', url.toString());
+  }, [debouncedSearch]);
 
   // Reset page when filters change
   useEffect(() => {

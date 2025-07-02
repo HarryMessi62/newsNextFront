@@ -15,7 +15,6 @@ const Footer = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">InfoCryptoX</h2>
-                <p className="text-sm text-gray-400">.com</p>
               </div>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
@@ -88,7 +87,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            © 2024 InfoCryptoX.com. All rights reserved. | 
+            © 2024 InfoCryptoX. All rights reserved. | 
             <Link href="/privacy" className="hover:text-white transition-colors ml-1">
               Privacy Policy
             </Link>

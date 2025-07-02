@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cryptonews-uk.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infocryptox.com';
   
   return {
     rules: [

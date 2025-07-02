@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { apiService } from '../services/api';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cryptonews-uk.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infocryptox.com';
   
   // Статические страницы
   const staticPages: MetadataRoute.Sitemap = [

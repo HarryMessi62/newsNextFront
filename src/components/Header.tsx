@@ -29,7 +29,6 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">InfoCryptoX</h1>
-              <p className="text-sm text-gray-400">.com</p>
             </div>
           </Link>
 
