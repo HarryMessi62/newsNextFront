@@ -151,7 +151,7 @@ export default async function ArticlesPage({ searchParams }: any) {
             {articles.map((article) => (
               <Link
                 key={article._id}
-                href={`/article/${article._id}`}
+                href={`/article/${article.slug}`}
                 className="h-full"
               >
                 <article className="bg-slate-800 rounded-lg overflow-hidden hover:bg-slate-700 transition-colors group h-full flex flex-col">
