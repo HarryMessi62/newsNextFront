@@ -56,6 +56,8 @@ export default async function ArticlesPage({ searchParams }: any) {
     totalPages: 0,
   }));
 
+  // (debug log removed)
+
   if (page > 1 && articles.length === 0) notFound();
 
   const buildPageLink = (p: number) => {

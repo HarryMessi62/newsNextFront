@@ -47,6 +47,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     // Получаем все статьи для динамического sitemap
     const response = await apiService.getArticles(1, 1000); // Получаем больше статей для sitemap
+
+    // 1) Отдельные страницы статей
     const articlePages: MetadataRoute.Sitemap = response.articles.map((article) => ({
       url: `${baseUrl}/article/${article._id}`,
       lastModified: new Date(article.updatedAt || article.createdAt),
@@ -54,26 +56,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    // Добавляем страницы категорий
-    const categories = [
-      'Bitcoin News',
-      'Altcoin News',
-      'DeFi News',
-      'NFT News',
-      'Regulation',
-      'Trading',
-      'Mining',
-      'Technology'
-    ];
+    // 2) Пагинация общего списка статей
+    const PER_PAGE = 12; // Из pages/articles
+    const totalPages = Math.ceil((response.total ?? response.articles.length) / PER_PAGE);
+    const listPages: MetadataRoute.Sitemap = [];
+    for (let page = 2; page <= totalPages; page++) {
+      listPages.push({
+        url: `${baseUrl}/articles?page=${page}`,
+        lastModified: new Date(),
+        changeFrequency: 'daily',
+        priority: 0.9,
+      });
+    }
 
-    const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-      url: `${baseUrl}/articles?category=${encodeURIComponent(category)}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    }));
+    // Категорий и страниц поиска не добавляем, чтобы не индексировать их в sitemap
 
-    return [...staticPages, ...articlePages, ...categoryPages];
+    return [...staticPages, ...listPages, ...articlePages];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     // Возвращаем только статические страницы в случае ошибки
