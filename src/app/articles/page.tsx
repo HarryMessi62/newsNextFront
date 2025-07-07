@@ -7,6 +7,7 @@ import {
   getAuthorName,
   type Article,
 } from '../../services/api';
+import type { Metadata } from 'next';
 
 // Next.js PageProps-compatible
 interface PageProps {
@@ -42,6 +43,26 @@ async function fetchArticles(search: string, page: number) {
     return apiService.searchArticles(search, page, PER_PAGE);
   }
   return apiService.getArticles(page, PER_PAGE);
+}
+
+// ─── Метаданные (canonical) ──────────────────────────────────────────────────
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const pageParam = Array.isArray(searchParams?.page) ? searchParams.page[0] : searchParams?.page;
+  const page = Number(pageParam) > 0 ? Number(pageParam) : 1;
+  const hasSearch = typeof searchParams?.search === 'string' && searchParams.search.trim().length > 0;
+
+  if (hasSearch) {
+    // Для страниц с поиском canonical не ставим (считаем их дубликатами)
+    return {};
+  }
+
+  const canonicalPath = page > 1 ? `/articles?page=${page}` : '/articles';
+  return {
+    alternates: {
+      canonical: canonicalPath,
+    },
+  };
 }
 
 export default async function ArticlesPage({ searchParams }: any) {
