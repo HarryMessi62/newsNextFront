@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     title: `${article.title} – InfoCryptoX.com`,
     description: article.excerpt ?? article.title,
     alternates: {
-      canonical: `${baseUrl}/article/${id}`
+      canonical: `${baseUrl}/article/${article.slug}`
     },
     keywords: [
       'cryptocurrency',
