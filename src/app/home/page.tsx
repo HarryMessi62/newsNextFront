@@ -39,27 +39,27 @@ const prioritizeArticles = (articles: any[]): any[] => {
   }
   return prioritized;
 };
-
-// Функция для получения уникальных статей с тегами
+  
+  // Функция для получения уникальных статей с тегами
 const getArticlesByTags = (latestArticles: any[]) => {
   if (!latestArticles || latestArticles.length === 0) return [];
-  
-  // Фильтруем статьи которые имеют теги и выбираем уникальные
+    
+    // Фильтруем статьи которые имеют теги и выбираем уникальные
   const articlesWithTags = latestArticles
     .filter((article: any) => article.tags && Array.isArray(article.tags) && article.tags.length > 0)
-    .slice(0, 4) // Берём первые 4 статьи с тегами
+      .slice(0, 4) // Берём первые 4 статьи с тегами
     .map((article: any) => {
-      // Для каждой статьи выбираем первый подходящий тег
+        // Для каждой статьи выбираем первый подходящий тег
       const validTag = article.tags.find((tag: string) => tag && typeof tag === 'string' && tag.length > 0);
-      return {
-        ...article,
-        currentTag: validTag || 'General'
-      };
-    });
+        return {
+          ...article,
+          currentTag: validTag || 'General'
+        };
+      });
+    
+    return articlesWithTags;
+  };
   
-  return articlesWithTags;
-};
-
 export default async function Home() {
   const featuredData = await fetchJson<any[]>('/articles/featured?limit=6');
   const latestData = await fetchJson<any[]>('/articles/latest?limit=50');
