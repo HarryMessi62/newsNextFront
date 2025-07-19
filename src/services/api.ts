@@ -48,6 +48,7 @@ export interface Article {
   createdAt: string;
   updatedAt: string;
   publishedAt?: string;
+  isParsed?: boolean;
   media?: {
     featuredImage?: {
       url: string;

@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   return {
     title: `${article.title} – InfoCryptoX.com`,
     description: article.excerpt ?? article.title,
+    robots: article.isParsed ? 'noindex, nofollow' : 'index, follow',
     keywords: [
       'cryptocurrency',
       'infocryptox.com',
