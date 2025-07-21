@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       type: 'article',
       publishedTime: article.createdAt,
       modifiedTime: article.updatedAt,
-      url: `${baseUrl}/article/${id}`,
+      url: `${baseUrl}/article/${article.slug}`,
       images: [
         {
           url: imageUrl,
