@@ -176,7 +176,7 @@ export default async function Home() {
               <div className="space-y-4">
                 {latest.data.slice(0, 8).map((article: any) => (
                   <div key={article._id} className="group cursor-pointer">
-                    <Link href={`/article/${article._id}`} className="block">
+                    <Link href={`/article/${article.slug}`} className="block">
                       <div className="flex items-start space-x-3">
                         <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
                         <div className="flex-1 min-w-0">
