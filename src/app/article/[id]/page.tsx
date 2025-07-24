@@ -39,6 +39,9 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       article.category,
       ...(article.tags ?? [])
     ].join(', '),
+    alternates: {
+      canonical: `${baseUrl}/article/${article.slug}`,
+    },
     openGraph: {
       title: article.title,
       description: article.excerpt ?? article.title,
