@@ -240,7 +240,7 @@ export default async function Home() {
               {/* Additional spotlight articles */}
               <div className="p-6 space-y-4">
                 {latest.data.slice(1, 6).map((article: any) => (
-                  <Link key={article._id} href={`/article/${article._id}`} className="block">
+                  <Link key={article._id} href={`/article/${article.slug}`} className="block">
                     <div className="flex space-x-4 group cursor-pointer">
                       <img
                         src={getImageUrl(article)}
@@ -281,7 +281,7 @@ export default async function Home() {
               
               <div className="space-y-4">
                 {featured.data.slice(0, 6).map((article: any) => (
-                  <Link key={article._id} href={`/article/${article._id}`} className="block">
+                  <Link key={article._id} href={`/article/${article.slug}`} className="block">
                     <div className="group cursor-pointer">
                       <div className="flex items-start space-x-3">
                         <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
@@ -322,7 +322,7 @@ export default async function Home() {
                 
                 return (
                   <div key={`${article._id}-${article.currentTag}`} className="bg-slate-800 rounded-lg overflow-hidden group hover:bg-slate-700 transition-colors">
-                    <Link href={`/article/${article._id}`} className="block">
+                    <Link href={`/article/${article.slug}`} className="block">
                       <div className="relative">
                         <img
                           src={getImageUrl(article)}
