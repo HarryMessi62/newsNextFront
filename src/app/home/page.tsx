@@ -208,7 +208,7 @@ export default async function Home() {
               </div>
               
               {latest.data.length > 0 && (
-                <Link href={`/article/${latest.data[0]._id}`} className="block">
+                <Link href={`/article/${latest.data[0].slug}`} className="block">
                   <div className="relative cursor-pointer group">
                     <img
                       src={getImageUrl(latest.data[0])}
