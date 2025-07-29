@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
 // ─── Страница ────────────────────────────────────────────────────────
 export default async function ArticlePage({ params }: any) {
-  const { id } = await params;
+  const { slug : id } = await params;
   const article = await apiService.getArticleById(id).catch(() => null);
   if (!article) notFound();
 
