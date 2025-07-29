@@ -12,7 +12,7 @@ export const revalidate = 600;
 
 // ─── <head> (OG-теги, canonical и т.п.) ───
 export async function generateMetadata({ params }: any): Promise<Metadata> {
-  const { id } = await params;
+  const { slug : id } = await params;
   const article = await apiService.getArticleById(id).catch(() => null);
   if (!article) {
     return {
