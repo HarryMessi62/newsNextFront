@@ -3,6 +3,7 @@ import axios from 'axios';
 // Создаем экземпляр axios с базовой конфигурацией https://infocryptox.com/api
 const api = axios.create({
   baseURL: 'https://infocryptox.com/api', // Замените на ваш реальный URL API,
+  // baseURL: 'http://localhost:5000/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
